@@ -16,7 +16,7 @@ import Logger from './components/Logger';
 import Analytics from './components/Analytics';
 import AICoach from './components/AICoach';
 
-const API_BASE = "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
