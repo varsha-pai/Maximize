@@ -1,6 +1,6 @@
 # Maximize: AI-Powered Personal Productivity Automation System
 
-Maximize (or LifeOS) is a personal productivity dashboard and AI coaching system. It allows you to track daily activities, habits, tasks, mood, sleep, and focus sessions. It compiles these metrics to calculate a dynamic **AI Productivity Score** and generates automated advice via local/cloud LLMs and n8n workflows.
+Maximize is a personal productivity dashboard and AI coaching system. It allows you to track daily activities, habits, tasks, mood, sleep, and focus sessions. It compiles these metrics to calculate a dynamic **AI Productivity Score** and generates automated advice via local/cloud LLMs and n8n workflows.
 
 ## Features
 
