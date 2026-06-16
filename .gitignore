@@ -1,0 +1,22 @@
+# Dependency directories
+/frontend/node_modules/
+/backend/venv/
+
+# Environment configurations (contains API keys)
+.env
+/backend/.env
+
+# Local database files
+/backend/maximize.db
+/backend/maximize.db-journal
+
+# Compilation and build outputs
+/frontend/dist/
+/backend/__pycache__/
+*.pyc
+
+# IDE configs and OS metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

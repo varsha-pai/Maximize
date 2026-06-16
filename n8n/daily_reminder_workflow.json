@@ -1,0 +1,120 @@
+{
+  "name": "Daily Morning Reminder Briefing",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "1e5f8841-f09c-4903-a15d-8ba58efb1320",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        250,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/analytics",
+        "options": {}
+      },
+      "id": "8b9e67d2-432d-45af-bc74-6f0212df8824",
+      "name": "Fetch Today's Analytics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        450,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/coach/chat",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "=Summarize yesterday's logs. Focus hours: {{ $json.metrics.focusMinutes }} mins, habits completed: {{ $json.metrics.habitsCompleted }}/{{ $json.metrics.habitsTotal }}, sleep: {{ $json.metrics.sleepMinutes }} mins. Generate a short 3-line morning notification telling me what went well and what my focus should be today."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5f6e87f1-8f52-4752-9df7-526487e6be9c",
+      "name": "Request AI Morning Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        650,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "id": "2db4e80f-9031-41be-8cd4-5fbc87a228f4",
+      "name": "Log Morning Notification",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        850,
+        250
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Today's Analytics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Today's Analytics": {
+      "main": [
+        [
+          {
+            "node": "Request AI Morning Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request AI Morning Summary": {
+      "main": [
+        [
+          {
+            "node": "Log Morning Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "instanceId": "local"
+  },
+  "id": "1",
+  "active": false
+}

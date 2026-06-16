@@ -1,0 +1,120 @@
+{
+  "name": "Weekly Productivity Report Compiler",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 21 * * 0"
+            }
+          ]
+        }
+      },
+      "id": "e405e54c-cb14-411a-a1cc-444a98eb0ef0",
+      "name": "Schedule Trigger (Sunday 9PM)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        250,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:8000/api/analytics",
+        "options": {}
+      },
+      "id": "af14a1cc-a1cc-444a-a1cc-444a98eb0ef0",
+      "name": "Fetch Weekly Analytics",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        450,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://127.0.0.1:8000/api/coach/chat",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "=Create a structured Weekly Performance Report based on these metrics. Weekly focus logs: {{ JSON.stringify($json.weeklyTimeline) }}. Activity distribution: {{ JSON.stringify($json.activityDistribution) }}. Start with '### WEEKLY PRODUCTIVITY REPORT' followed by total focus hours, a summary of sleep, and specific lessons for the upcoming week."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bf14a1cc-a1cc-444a-a1cc-444a98eb0ef0",
+      "name": "Format Weekly AI Report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        650,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "id": "cf14a1cc-a1cc-444a-a1cc-444a98eb0ef0",
+      "name": "Log Weekly Report",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        850,
+        250
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger (Sunday 9PM)": {
+      "main": [
+        [
+          {
+            "node": "Fetch Weekly Analytics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Weekly Analytics": {
+      "main": [
+        [
+          {
+            "node": "Format Weekly AI Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Weekly AI Report": {
+      "main": [
+        [
+          {
+            "node": "Log Weekly Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "instanceId": "local"
+  },
+  "id": "3",
+  "active": false
+}
